@@ -1,5 +1,6 @@
 import Features from '@/components/ui/landing/features';
 import Hero from '@/components/ui/landing/hero';
+import Integration from '@/components/ui/landing/integrations';
 import Navbar from '@/components/ui/landing/nav';
 import SocialProof from '@/components/ui/landing/social';
 import React from 'react';
@@ -11,6 +12,7 @@ const page = () => {
       <Hero />
       <SocialProof />
       <Features />
+      <Integration />
     </main>
   );
 }
