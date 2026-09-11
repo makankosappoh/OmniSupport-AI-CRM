@@ -3,7 +3,10 @@ import Hero from '@/components/ui/landing/hero';
 import Integration from '@/components/ui/landing/integrations';
 import Navbar from '@/components/ui/landing/nav';
 import SocialProof from '@/components/ui/landing/social';
+import Pricing from '@/components/ui/landing/pricing';
+import Footer from '@/components/ui/landing/footer';
 import React from 'react';
+
 
 const page = () => {
   return (
@@ -13,6 +16,8 @@ const page = () => {
       <SocialProof />
       <Features />
       <Integration />
+      <Pricing />
+      <Footer />
     </main>
   );
 }
