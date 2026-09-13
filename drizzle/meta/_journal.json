@@ -8,6 +8,13 @@
       "when": 1789202981995,
       "tag": "0000_next_hulk",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789296679673,
+      "tag": "0001_daily_morph",
+      "breakpoints": true
     }
   ]
 }
