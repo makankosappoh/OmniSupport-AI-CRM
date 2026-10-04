@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import QuickActions from '@/components/dashboard/knowledge/quickActions'
 import AddKnowledgeModal from '@/components/dashboard/knowledge/addKnowledgeModal'
+import KnowledgeTable from '@/components/dashboard/knowledge/KnowledgeTable'
 
 
 import React from 'react'
@@ -19,6 +20,8 @@ const Page = () => {
     const [knowledgeSources, setKnowledgeSources] = useState<KnowledgeSource[]>(
         []
     );
+    const [selectedSource, setSelectedSource] = useState<KnowledgeSource | null>(null);
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
 
     const openModal = (tab: string) => {
             setDefaultTab(tab);
@@ -59,6 +62,11 @@ const Page = () => {
         }
     };
 
+    const handleSourceClick = (source: KnowledgeSource) => {
+        setSelectedSource(source);
+        setIsSheetOpen(true);
+    }
+
     return (
     <div className='p-6 md:p-8 space-y-8 max-7xl mx-auto animate-in fade-in duration-500'> 
         <div className="flex flex-col md:flex-row items-start justify-between md:items-center gap-4">
@@ -83,6 +91,14 @@ const Page = () => {
 
         {/* Quick Actions */}
         <QuickActions onOpenModal={openModal} />
+
+        <KnowledgeTable 
+        sources={knowledgeSources}
+        onSourceClick={handleSourceClick}
+        isLoading={knowledgeSourcesLader}
+        
+        />
+
         <AddKnowledgeModal
         isOpen={isAddOpen}
         setIsOpen={setIsAddOpen}

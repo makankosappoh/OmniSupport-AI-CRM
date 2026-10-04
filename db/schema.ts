@@ -23,3 +23,18 @@ export const metadata = pgTable("metadata", {
     external_links: text("external_links"),
     created_at: text("created_at").default(sql`now()`),
 });
+
+export const knowledge_source = pgTable("knowledge_source", {
+    id: text("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+    user_email: text("user_email").notNull(),
+    name: text("name").notNull(),
+    status: text("status").notNull().default("active"),
+    type: text("type").notNull(),
+    source_url: text("source_url").notNull(),
+    content: text("content"),
+    metadata: text("meta_data"),
+    created_at: text("created_at").default(sql`now()`),
+    last_updated: text("last_updated").default(sql`now()`),
+});
