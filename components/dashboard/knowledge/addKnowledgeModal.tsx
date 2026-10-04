@@ -73,7 +73,21 @@ const AddKnowledgeModal = ({isOpen, setIsOpen, defaultTab, setDefaultTab, onImpo
                 setError("Content is required");
                 return;
             }
+            data.title = docsTitle;
+            data.content = docsContent;
+        } else if(defaultTab === "upload") {
+            if(!uploadedFile){
+                setError("Please select a file to upload");
+                return;
+            }
+            data.file = uploadedFile;
         }
+        await onImport(data);
+        setWebsiteUrl("");
+        setDocsTitle("");
+        setDocsContent("");
+        setUploadedFile(null);
+        setError(null);
     };
 return <Dialog
     open={isOpen}
