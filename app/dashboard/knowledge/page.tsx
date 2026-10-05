@@ -6,7 +6,8 @@ import { useState } from 'react'
 import QuickActions from '@/components/dashboard/knowledge/quickActions'
 import AddKnowledgeModal from '@/components/dashboard/knowledge/addKnowledgeModal'
 import KnowledgeTable from '@/components/dashboard/knowledge/KnowledgeTable'
-
+import { useEffect } from 'react'
+import SourceDetailsSheet from '@/components/dashboard/knowledge/sourceDetailsSheet'
 
 import React from 'react'
 
@@ -27,6 +28,16 @@ const Page = () => {
             setDefaultTab(tab);
             setIsAddOpen(true);
     };
+
+    useEffect(() => {
+            const fetchKnowledgeSources = async () => {
+                const res = await fetch("/api/knowledge/fetch");
+                const data = await res.json();
+                setKnowledgeSources(data.sources);
+                setKnowledgeSourcesLader(false);
+            };
+            fetchKnowledgeSources();
+    }, []);
 
     const handleImportSources = async (data: any) => {
         setKnowledgeStoringLoader(true);
@@ -109,6 +120,13 @@ const Page = () => {
         existingSources={knowledgeSources}
         
         />
+
+        <SourceDetailsSheet 
+        isOpen={isSheetOpen}
+        setIsOpen={setIsSheetOpen}
+        selectedSource={selectedSource}
+        />
+
     </div>
     )
 }
