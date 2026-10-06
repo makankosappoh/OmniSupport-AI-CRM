@@ -1,4 +1,7 @@
 import { Table, TableHead, TableHeader, TableRow, TableBody, TableCell } from "@/components/ui/table";
+import { getStatusBadge, getToneBadge } from "@/components/dashboard/sections/sectionBadges";
+import { Button } from "@/components/ui/button";
+import { ShieldAlert } from "lucide-react";
 import react from "react";
 
 interface SectionsTableProps{
@@ -37,12 +40,59 @@ const SectionsTable = ({sections, isLoading, onPreview, onCreateSection}: Sectio
                 {isLoading ? (
                     <TableRow>
                         <TableCell colSpan={6} className="h-48 text-center">
-
+                            <div className="flex items-center justify-enter gap-2 text-zinc-500">
+                                <div className="w-4 h-4 border-2 border-zinc-600 border-t-transparent rounded-full animate-spin"></div>
+                                <span className="text-sm">Loading Sections...</span>
+                            </div>
                         </TableCell>
                     </TableRow>
-                ) : <>
-                </>}
-
+                ) : (
+                    sections?.length > 0 ? sections.map((section) => 
+                    <TableRow key={section.id} className="border-white/5 group transition-colors">
+                        <TableCell className='font-medium text-zinc-200'>
+                            {section.name}
+                        </TableCell>
+                        <TableCell className='text-zinc-400 text-sm'>
+                            {section.sourceCount}
+                            <span className="text-zinc-600">
+                                Sources
+                            </span>
+                        </TableCell>
+                        <TableCell>{getToneBadge(section.tone)}</TableCell>
+                        <TableCell className="text-zinc-400 text-sm">
+                            {section.scopeLabel}
+                        </TableCell>
+                        <TableCell>
+                            {getStatusBadge(section.status)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                            <Button 
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 text-zinc-400 hover:text-white hover:bg-white/5"
+                            onClick={() => onPreview(section)}
+                            >
+                                Preview
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={6} className="h-48 text-center">
+                                <div className="flex flex-col items-center justify-center gap-2">
+                                <ShieldAlert className="w-8 h-8 text-zinc-600" />
+                                <span className="text-zinc-400">No sections defined yet.</span>
+                                <Button
+                                    variant="link"
+                                    className="text-indigo-400"
+                                    onClick={onCreateSection}
+                                >
+                                Create your first section
+                                </Button>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                ))}
             </TableBody>
         </Table>
     );

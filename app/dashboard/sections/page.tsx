@@ -10,7 +10,6 @@ import SectionsTable from '@/components/dashboard/sections/sectionTable'
 import React from 'react'
 
 
-
 interface KnowledgeSource {
     id: string;
     name: string;
@@ -145,7 +144,30 @@ const Page = () => {
     };
 
     const handleDeleteSection = async () => {
-
+        if (!selectedSection || selectedSection.id === "new") return;
+        if (
+            !confirm(
+                `Are you sure you want to delete "${selectedSection.name}"? This action cannot be undone.`
+            )
+        )
+        { return;}
+        try{
+            setIsSaving(true);
+            const response = await fetch(`/api/section/delete`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ id: selectedSection.id }),
+            });
+            if (!response.ok) throw new Error("Failed to delete section");
+            await fetchSections();
+            setIsSheetOpen(false);
+        } catch (error) {
+            console.error("Failed to delete section:", error);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     const handlePreviewSection = async (section: Section) => {
