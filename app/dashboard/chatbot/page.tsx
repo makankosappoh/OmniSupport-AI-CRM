@@ -6,6 +6,7 @@ import ChatSimulator from '@/components/dashboard/chatbot/chatSimulator'
 import { se } from 'date-fns/locale';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ApperanceConfig from '@/components/dashboard/chatbot/apperanceConfig';
+import EmbedCodeConfig from '@/components/dashboard/chatbot/embedCodeConfig';
 
 interface ChatBotMetadata {
     id: string;
@@ -69,7 +70,9 @@ const ChatbotPage = () => {
             scrollViewportRef.current.scrollIntoView({ behavior: "smooth" });
         }}, [messages, isTyping]);
 
-const handleSend = async () => {};
+const handleSend = async () => {
+    
+};
 
 const handleKeyDown = async (e:React.KeyboardEvent) => {
     if(e.key === "Enter" && !e.shiftKey){
@@ -108,10 +111,38 @@ const handleReset = async () => {
 };
 
     const handleSave = async () => {
-
+        setIsSaving(true);
+        try {
+            const res = await fetch("/api/chatbot/metadata/update", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    color: primaryColor,
+                    welcome_message: welcomeMessage,
+                }),
+            });
+            if (res.ok) {
+                const updated = await res.json();
+                setMetadata(updated);
+            } else {
+                console.error("Failed to save changes");
+            }
+        } catch (error) {
+            console.error("Failed to save changes:", error);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     const hasChanges = metadata ? (primaryColor !== (metadata.color || "#4f46e5") || welcomeMessage !== (metadata.welcome_message || "hi there, How can I help you today?")) : false;
+
+    if(loading){
+        return (
+            <div className="p-8 text-zinc-500">Loading chatbot configuration...</div>
+        );
+    }
 
     return (
         <div className="p-6 md:p-8 space-y-8  max-w-400 mx-auto animate-in fade-in duration-500 h-[calc(100vh-64px)] overflow-hidden flex flex-col">
@@ -155,7 +186,7 @@ const handleReset = async () => {
                     isSaving={isSaving}
                     hasChanges={hasChanges}
                     />
-                    <EmbedCodeConfig chatbotId={} />
+                    <EmbedCodeConfig chatbotId={metadata?.id} />
                 </div>
             </ScrollArea>
         </div>
