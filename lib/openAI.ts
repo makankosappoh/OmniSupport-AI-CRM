@@ -24,33 +24,48 @@ agent: url.toString().startsWith("https") ? agent : undefined,
 
 export const openai = new OpenAI({
 
-apiKey: process.env.OPENAI_API_KEY,
+apiKey: process.env.GROQ_API_KEY,
 
 fetch: customFetch,
 
-baseURL: process.env.OPENAI_BASE_URL,
+baseURL: process.env.GROQ_BASE_URL,
 
 });
 
+function cleanMarkdown(md: string) {
+  return md
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/&amp;/g, "&")
+    .replace(/\\\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 export async function summarizeMarkdown(markdown: string) {
 
-try {
+  const cleaned = cleanMarkdown(markdown).slice(0, 12000);
 
-const completion = await openai.chat.completions.create({
+  try {
 
-model: "gpt-4o-mini",
+    const completion = await openai.chat.completions.create({
 
-temperature: 0.1,
+      model: "openai/gpt-oss-20b",
 
-max_tokens: 900,
+      temperature: 0.1,
 
-messages: [
+      max_tokens: 2500,
 
-{
+      // @ts-ignore - Groq reasoning models accept this
+      reasoning_effort: "low",
 
-role: "system",
+      messages: [
 
-content: `
+        {
+
+          role: "system",
+
+          content: `
 
 You are a data summarization engine for an AI chatbot.
 
@@ -73,70 +88,84 @@ The result will be stored as long-term context for a chatbot.
 
 `,
 
-},
+        },
 
-{
+        {
 
-role: "user",
+          role: "user",
 
-content: markdown,
+          content: cleaned,
 
-},
+        },
 
-],
+      ],
 
-});
+    });
 
-return completion.choices[0].message.content?.trim() ?? "";
+    const summary = completion.choices[0].message.content?.trim() ?? "";
 
-} catch (error) {
+    console.log(
+      "summary length:",
+      summary.length,
+      "| finish:",
+      completion.choices[0].finish_reason
+    );
 
-console.error("Error in summarizeMarkdown:", error);
+    // never return an empty preview
+    return summary || cleaned.slice(0, 3000);
 
-throw error;
+  } catch (error) {
 
-}
+    console.error("Error in summarizeMarkdown:", error);
+
+    // keep the scrape instead of losing it when Groq fails
+    return cleaned.slice(0, 3000);
+
+  }
 
 }
 
 export async function summarizeConversation(messages: any[]) {
 
-try {
+  try {
 
-const completion = await openai.chat.completions.create({
+    const completion = await openai.chat.completions.create({
 
-model: "gpt-4o-mini",
+      model: "openai/gpt-oss-20b",
 
-temperature: 0.3,
+      temperature: 0.3,
 
-max_tokens: 500,
+      max_tokens: 1500,
 
-messages: [
+      // @ts-ignore - Groq reasoning models accept this
+      reasoning_effort: "low",
 
-{
+      messages: [
 
-role: "system",
+        {
 
-content:
+          role: "system",
 
-"Summarize the following conversation history into a concise paragraph, preserving key details and user intent.The final output MUST be under 2000 words.",
+          content:
 
-},
+            "Summarize the following conversation history into a concise paragraph, preserving key details and user intent.The final output MUST be under 2000 words.",
 
-...messages,
+        },
 
-],
+        ...messages,
 
-});
+      ],
 
-return completion.choices[0].message.content?.trim() ?? "";
+    });
 
-} catch (error) {
+    return completion.choices[0].message.content?.trim() ?? "";
 
-console.error("Error in summarizeConversation:", error);
+  } catch (error) {
 
-throw error;
+    console.error("Error in summarizeConversation:", error);
 
-}
+    throw error;
+
+  }
 
 }

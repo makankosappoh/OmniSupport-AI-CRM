@@ -30,8 +30,8 @@ return (
             {
                 user ? (
                     <div className="flex items-center gap-3">
-                    <link href="/dashboard"
-                    className="h-10 px-4 rounded-xl bg-white text-black font-medium hover:bg-zinc-200 transition-all flex items-center gap-2">Dashboard</link>
+                    <Link href="/dashboard"
+                    className="h-10 px-4 rounded-xl bg-white text-black font-medium hover:bg-zinc-200 transition-all flex items-center gap-2">Dashboard</Link>
                     </div>
                 ) : (
                 <>

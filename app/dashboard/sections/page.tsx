@@ -242,7 +242,7 @@ const Page = () => {
                         setSelectedSources={setSelectedSources}
                         isLoadingSources={isLoadingSources}
                         knowledgeSources={knowledgeSources}
-                        isDisabled={isPreviewMode}
+                        isDisabled={false}
                         />
                     </div>
 

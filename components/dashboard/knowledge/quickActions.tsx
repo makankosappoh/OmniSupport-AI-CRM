@@ -4,7 +4,7 @@ import React from 'react'
 
 const QuickActions = ({onOpenModal,}:{onOpenModal: (tab:string) => void;}) => {
 return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Button
         variant="outline"
         className="h-auto py-8 px-6 flex items-center justify-center gap-4 border-white/5 bg-[#0A0A0E] hover:bg-white/2 hover:border-indigo-500/30 transition-all hover:text-white group whitespace-normal"

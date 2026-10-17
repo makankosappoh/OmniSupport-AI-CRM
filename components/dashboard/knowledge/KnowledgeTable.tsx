@@ -26,17 +26,57 @@ export const getTypeIcon = (type: SourceType) => {
 export const getStatusBadge = (status: SourceStatus) => {
     switch (status) {
         case "active":
-            return <Badge variant="default" className="bg-emerald-500 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20 shadow-none" />;
+            return (
+                <Badge 
+                    variant="outline" 
+                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 !text-white border-emerald-500/30 shadow-none"
+                >
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0 animate-pulse" />
+                    Active
+                </Badge>
+            );
         case "training":
-            return <Badge variant="secondary" className="bg-yellow-500 text-yellow-500 hover:bg-yellow-500/20 border-yellow-500/20 shadow-none" />;
+            return (
+                <Badge 
+                    variant="outline" 
+                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-500/10 !text-white border-yellow-500/30 shadow-none"
+                >
+                    <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 shrink-0 animate-pulse" />
+                    Training
+                </Badge>
+            );
         case "error":
-            return <Badge variant="destructive" className="bg-red-500 text-red-500 hover:bg-red-500/20 border-red-500/20 shadow-none" />;
+            return (
+                <Badge 
+                    variant="outline" 
+                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-500/10 !text-white border-red-500/30 shadow-none"
+                >
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" />
+                    Error
+                </Badge>
+            );
         case "excluded":
-            return <Badge variant="secondary" className="bg-zinc-500 text-zinc-500 hover:bg-zinc-500/20 border-zinc-500/20 shadow-none" />;
+            return (
+                <Badge 
+                    variant="outline" 
+                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-800 !text-white border-zinc-700/60 shadow-none"
+                >
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 shrink-0" />
+                    Excluded
+                </Badge>
+            );
         default:
-            return <Badge variant="outline">Unknown</Badge>;
+            return (
+                <Badge 
+                    variant="outline" 
+                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-zinc-800 !text-white border-zinc-700/60 shadow-none"
+                >
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 shrink-0" />
+                    {status || "Unknown"}
+                </Badge>
+            );
     }
-}
+};
 
 const KnowledgeTable = ({sources, onSourceClick, isLoading}: knowledgeTableProps) => {
 return <Card className="border-white/5 bg-[#0a0a0e]">
@@ -47,7 +87,7 @@ return <Card className="border-white/5 bg-[#0a0a0e]">
                 <div className="relative">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-500" />
                     <Input 
-                    className="pl-9 h-9 w-50 md:w-75 bg-white/2 border-whit/10 text-sm"
+                    className="pl-9 h-9 w-48 md:w-75 bg-white/2 border-white/10 text-sm"
                     placeholder="Search sources ..."
                     />
                 </div>

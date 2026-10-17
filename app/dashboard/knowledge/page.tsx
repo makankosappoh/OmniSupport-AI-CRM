@@ -78,8 +78,20 @@ const Page = () => {
         setIsSheetOpen(true);
     }
 
+    const handleDisconnectSource = async (sourceId: any) => {
+        try {
+            const response = await fetch(`/api/knowledge/delete?id=${sourceId}`, {
+                method: "DELETE",
+            });
+            if (!response.ok) throw new Error("Failed to delete source");
+            setKnowledgeSources((prev) => prev.filter((s: any) => s.id !== sourceId));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
-    <div className='p-6 md:p-8 space-y-8 max-7xl mx-auto animate-in fade-in duration-500'> 
+    <div className='p-6 md:p-8 space-y-8 max-w-7xl mx-auto animate-in fade-in duration-500'> 
         <div className="flex flex-col md:flex-row items-start justify-between md:items-center gap-4">
             <div>
                 <h1 className="text-2xl font-semi-bold text-white tracking-tight">
@@ -125,6 +137,7 @@ const Page = () => {
         isOpen={isSheetOpen}
         setIsOpen={setIsSheetOpen}
         selectedSource={selectedSource}
+        onDisconnect={handleDisconnectSource}
         />
 
     </div>

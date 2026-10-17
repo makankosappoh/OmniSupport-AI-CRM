@@ -4,7 +4,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-import react from "react";
+import React from "react";
 
 interface KnowledgeSource {
     id: string;
@@ -69,7 +69,7 @@ const SectionFormFields = ({
             </Label>
             <Input
             placeholder="e.g. Billing Policy"
-            className="bg-white/2 border-white/10 text-white placeholder:text-zinc-500"
+            className="bg-white/5 border-white/10 text-white placeholder:text-zinc-500"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             disabled={isDisabled}

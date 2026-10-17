@@ -7,9 +7,10 @@ interface SourceDetailsSheetProps {
     isOpen: boolean;
     setIsOpen: (Open: boolean) => void;
     selectedSource: KnowledgeSource | null;
+    onDisconnect?: (sourceId: any) => Promise<void>;
 }
 
-const SourceDetailsSheet = ({isOpen, setIsOpen, selectedSource }: SourceDetailsSheetProps) => {
+const SourceDetailsSheet = ({isOpen, setIsOpen, selectedSource,onDisconnect }: SourceDetailsSheetProps) => {
     if(!selectedSource) return null;
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -48,9 +49,14 @@ const SourceDetailsSheet = ({isOpen, setIsOpen, selectedSource }: SourceDetailsS
                         <Button
                         variant="destructive"
                         className="w-full bg-red-500/10 text-red-500 hover:bg-red-500/20"
+                        onClick={async () => {
+                        if (!selectedSource || !onDisconnect) return;
+                        await onDisconnect(selectedSource.id);
+                        setIsOpen(false);
+                        }}
                         >
-                            Disconnect Source
-                        </Button>
+                        Disconnect Source
+                    </Button>
                     </SheetFooter>
                 </div>
             </SheetContent>

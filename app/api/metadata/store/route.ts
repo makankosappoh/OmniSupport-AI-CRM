@@ -10,20 +10,20 @@ export async function POST(req:NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const { businessName, websiteUrl, externalLinks } = await req.json();
+        const { business_name, website_url, external_links } = await req.json();
 
-        if (!businessName || !websiteUrl) {
+        if (!business_name || !website_url) {
             return NextResponse.json({ error: "Missing Business Name or Website URL" }, { status: 400 });
         }
 
         const metadataResponse = await db.insert(metadata).values({
             user_email: user.email,
-            business_name: businessName,
-            website_url: websiteUrl,
-            external_links: externalLinks,
+            business_name,
+            website_url,
+            external_links,
         });
 
-        (await cookies()).set("metadata", JSON.stringify({ businessName }));
+        (await cookies()).set("metadata", JSON.stringify({ business_name }));
 
         return NextResponse.json({ metadataResponse }, { status: 201 });
 }
